@@ -21,10 +21,14 @@ class Post(models.Model):
     author = models.ForeignKey(User)
     category = models.ForeignKey(Category)
     tags = models.ManyToManyField(Tag, blank=True)
+    views = models.PositiveIntegerField(default=0)
     def __str__(self):
         return self.title
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'pk': self.pk})
+    def increase_views(self):
+        self.views += 1
+        self.save(update_fields=['views'])
     class Meta:
         '''
         ordering 属性用来指定文章排序方式，['-created_time'] 指定了依据哪个属性的值进行排序，
